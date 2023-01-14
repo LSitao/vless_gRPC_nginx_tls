@@ -1,0 +1,39 @@
+{
+    "log": {
+        "loglevel": "warning"
+    },
+    "inbounds": [{
+        "listen": "127.0.0.1", 
+        "port": "57899",
+        "protocol": "socks", 
+        "settings": {
+            "auth": "noauth"
+        }
+    }],
+    "outbounds": [{
+        "protocol": "vless", 
+        "settings": {
+            "vnext": [{
+                "address": "your_domain", 
+                "port": 443,
+                "users": [{
+                    "id": "your_uuid",
+                    "encryption": "none"
+                }]
+            }]
+        },
+        "streamSettings": {
+            "network": "gun",
+            "security": "tls",
+            "tlsSettings": {
+                "serverName": "your_domain", 
+                "alpn": [
+                    "h2"
+                ]
+            },
+            "grpcSettings": {
+                "serviceName": "grpc_proxy"
+            }
+        }
+    }]
+}

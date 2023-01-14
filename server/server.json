@@ -1,0 +1,43 @@
+{
+    "log": {
+        "loglevel": "warning"
+    },
+    "inbounds": [{
+        "port": 16969,
+        "listen": "127.0.0.1",
+        "protocol": "vless",
+        "settings": {
+            "clients": [{
+                "id": "$id"
+            }],
+            "decryption": "none"
+        },
+        "streamSettings": {
+            "network": "grpc",
+            "grpcSettings": {
+                "serviceName": "grpc_proxy"
+            }
+        }
+    }],
+    "outbounds": [{
+            "tag": "direct",
+            "protocol": "freedom",
+            "settings": {}
+        },
+        {
+            "tag": "blocked",
+            "protocol": "blackhole",
+            "settings": {}
+        }
+    ],
+    "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [{
+            "type": "field",
+            "ip": [
+                "geoip:private"
+            ],
+            "outboundTag": "blocked"
+        }]
+    }
+}
