@@ -4,31 +4,33 @@
 clear
 echo "欢迎使用vless+gRPC+nginx+tls一键脚本!"
 sleep 1
-echo "请输入你的域名"
+echo "请输入你的域名[输入完毕后回车]:"
 echo
-echo "[输入完毕后回车]:"
+#echo ""
 read domain
+echo
 echo -e "你想要什么样的伪装站?\n"
 read -p "1.游戏直播; 2.影视站" checkweb
 
 #开bbr
 if [ `grep -c "net.ipv4.tcp_congestion_control = bbr" /etc/sysctl.conf` -eq '0' ]
-then
-   echo "检测到你的系统未开启BBR!"
-   echo
-   read -p "是否开启bbr? [y/n] Default 'y':" checkbbr
-   if checkbbr=='y' || checkbbr=='\n'
+  then
+       echo "检测到你的系统已经开启BBR啦！"
+	   sleep 1 
+	   
+  else    
+      echo "检测到你的系统未开启BBR!"
+      echo
+      read -p "是否开启bbr? [y/n] Default 'y':" checkbbr
+      if checkbbr=='y' || checkbbr=='\n'
         then
                 echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
                 echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
                 sysctl -p
 				echo "BBR开启成功！"
-				sleep 1
-   fi
+				sleep 1   
+      fi
 	
-else 
-    echo "检测到你的系统已经开启BBR啦！"
-	sleep 1
 fi
 clear
 echo "OK! 一切已准备就绪，按回车键开始安装!"
@@ -178,6 +180,7 @@ server {
     ssl_prefer_server_ciphers on;
 } " > /etc/nginx/conf.d/grpc_proxy.conf
 
+service nginx restart
 clear
 echo -e "安装完成!\n"
 echo
