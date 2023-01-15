@@ -4,10 +4,7 @@
 clear
 echo "欢迎使用vless+gRPC+nginx+tls一键脚本!"
 sleep 1
-echo "请输入你的域名[输入完毕后回车]:"
-#echo
-#echo ""
-read domain
+read -p "请输入你的域名[输入完毕后回车]:" domain
 echo
 echo -e "你想要什么样的伪装站?\n"
 read -p "1.游戏直播; 2.影视站" checkweb
