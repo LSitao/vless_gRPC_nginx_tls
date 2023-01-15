@@ -118,7 +118,7 @@ nginx -v
 echo "Nginx安装成功!"
 
 #伪装站
-mkdir /web
+mkdir -p /web
 if checkweb=='1'
  then
      wget https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/web/game.tar.gz
