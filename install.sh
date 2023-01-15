@@ -60,7 +60,8 @@ fi
 bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 systemctl enable xray
 id=`xray uuid`
-echo "{
+echo "
+{
     "log": {
         "loglevel": "warning"
     },
@@ -70,7 +71,7 @@ echo "{
         "protocol": "vless",
         "settings": {
             "clients": [{
-                "id": "$id"
+                "id": "${id}"
             }],
             "decryption": "none"
         },
@@ -119,18 +120,18 @@ nginx -v
 echo "Nginx安装成功!"
 
 #伪装站
-mkdir -p /web
+mkdir /web
 if checkweb=='1'
- then
-     wget https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/web/game.tar.gz
-     tar -zxvf game.tar.gz -C /web
+    then
+         wget https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/web/game.tar.gz
+         tar -zxvf game.tar.gz -C /web
 	 cd /web/game
 	 mv ./* ..
 	 cd ..
 	 ls
-elif checkweb=='2'
-  then 
-     wget https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/web/movie.tar.gz
+ elif checkweb=='2'
+     then 
+         wget https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/web/movie.tar.gz
 	 tar -zxvf movie.tar.gz -C /web
 	 cd /web/movie
 	 mv ./* ..
