@@ -54,7 +54,6 @@ else
         echo "证书安装失败！请检查原因！有问题可联系telegram @iu536"
 		echo ""
 fi
-exit
 
 #安装Xray
 bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
