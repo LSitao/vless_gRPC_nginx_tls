@@ -5,7 +5,7 @@ clear
 echo "欢迎使用vless+gRPC+nginx+tls一键脚本!"
 sleep 1
 echo "请输入你的域名[输入完毕后回车]:"
-echo
+#echo
 #echo ""
 read domain
 echo
