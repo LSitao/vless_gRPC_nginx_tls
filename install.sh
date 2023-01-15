@@ -13,8 +13,8 @@ read -p "1.游戏直播; 2.影视站" checkweb
 #开bbr
 if [ `grep -c "net.ipv4.tcp_congestion_control = bbr" /etc/sysctl.conf` -eq '0' ]
   then
-       echo "检测到你的系统已经开启BBR啦！"
-       sleep 1 
+        echo "检测到你的系统已经开启BBR啦！"
+	sleep 1 
 	   
   else    
       echo "检测到你的系统未开启BBR!"
@@ -50,9 +50,8 @@ if `test -s /usr/server.crt`
         echo
         echo -e "/usr/server.crt"
         echo -e "/usr/server.key\n"
-else
+ else
         echo "证书安装失败！请检查原因！有问题可联系telegram @iu536"
-	echo 
 	exit
 fi
 
@@ -69,15 +68,12 @@ systemctl restart xray
 
 #安装nginx
 apt install curl gnupg2 ca-certificates lsb-release debian-archive-keyring -y
-
 curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
     | tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
 gpg --dry-run --quiet --import --import-options import-show /usr/share/keyrings/nginx-archive-keyring.gpg
-
 echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
 http://nginx.org/packages/debian `lsb_release -cs` nginx" \
     | tee /etc/apt/sources.list.d/nginx.list
-    
 apt update
 apt install nginx -y
 nginx -v
@@ -144,7 +140,7 @@ server {
     ssl_prefer_server_ciphers on;
 } " > /etc/nginx/conf.d/grpc_proxy.conf
 
-service nginx restart
+systemctl restart nginx
 clear
 echo -e "安装完成!\n"
 echo
