@@ -51,7 +51,9 @@ if `test -s /usr/server.crt`
         echo -e "/usr/server.key\n"
 else
         echo "证书安装失败！请检查原因！有问题可联系telegram @iu536"
-		echo ""
+        echo ""
+	exit
+		
 fi
 
 #安装Xray
