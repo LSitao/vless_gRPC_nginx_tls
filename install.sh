@@ -183,7 +183,7 @@ echo -e "安装完成!\n"
 echo
 echo "已经为你生成了节点连接:"
 echo
-echo "vless://${id}@${domain}:443?type=grpc&encryption=none&serviceName=${grpc_proxy}&security=tls&sni=${domain}#${Node_Vless_gRPC}"
+echo "vless://${id}@${domain}:443?type=grpc&encryption=none&serviceName=grpc_proxy&security=tls&sni=${domain}#Node_Vless_gRPC"
 echo
 echo -e "即将退出脚本\n"
 for time in `seq 9 -1 0`;do
