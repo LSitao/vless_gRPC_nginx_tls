@@ -4,6 +4,7 @@
 clear
 echo "欢迎使用vless+gRPC+nginx+tls一键脚本!"
 sleep 1
+
 read -p "请输入你的域名[输入完毕后回车]:" domain
 
 echo -e "你想要什么样的伪装站?\n"
@@ -51,59 +52,19 @@ if `test -s /usr/server.crt`
         echo -e "/usr/server.key\n"
 else
         echo "证书安装失败！请检查原因！有问题可联系telegram @iu536"
-        echo ""
-	exit
-		
+		echo ""
+		exit
 fi
 
 #安装Xray
 bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+
 systemctl enable xray
+
 id=`xray uuid`
-echo "
-{
-    "log": {
-        "loglevel": "warning"
-    },
-    "inbounds": [{
-        "port": 16969,
-        "listen": "127.0.0.1",
-        "protocol": "vless",
-        "settings": {
-            "clients": [{
-                "id": "${id}"
-            }],
-            "decryption": "none"
-        },
-        "streamSettings": {
-            "network": "grpc",
-            "grpcSettings": {
-                "serviceName": "grpc_proxy"
-            }
-        }
-    }],
-    "outbounds": [{
-            "tag": "direct",
-            "protocol": "freedom",
-            "settings": {}
-        },
-        {
-            "tag": "blocked",
-            "protocol": "blackhole",
-            "settings": {}
-        }
-    ],
-    "routing": {
-        "domainStrategy": "AsIs",
-        "rules": [{
-            "type": "field",
-            "ip": [
-                "geoip:private"
-            ],
-            "outboundTag": "blocked"
-        }]
-    }
-}" > /usr/local/etc/xray/config.json
+
+curl https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/server/server.json > /usr/local/etc/xray/config.json
+
 systemctl restart xray
 
 #安装nginx
@@ -120,18 +81,18 @@ nginx -v
 echo "Nginx安装成功!"
 
 #伪装站
-mkdir /web
+mkdir -p /web
 if checkweb=='1'
-    then
-         wget https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/web/game.tar.gz
-         tar -zxvf game.tar.gz -C /web
+ then
+     wget https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/web/game.tar.gz
+     tar -zxvf game.tar.gz -C /web
 	 cd /web/game
 	 mv ./* ..
 	 cd ..
 	 ls
- elif checkweb=='2'
-     then 
-         wget https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/web/movie.tar.gz
+elif checkweb=='2'
+  then 
+     wget https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/web/movie.tar.gz
 	 tar -zxvf movie.tar.gz -C /web
 	 cd /web/movie
 	 mv ./* ..
