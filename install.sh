@@ -103,7 +103,7 @@ echo "{
         }]
     }
 }" > /usr/local/etc/xray/config.json
-systemcrl restart xray
+systemctl restart xray
 
 #安装nginx
 apt install curl gnupg2 ca-certificates lsb-release debian-archive-keyring -y
