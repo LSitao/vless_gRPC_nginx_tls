@@ -8,7 +8,7 @@
         "protocol": "vless",
         "settings": {
             "clients": [{
-                "id": "$id"
+                "id": "`xray uuid`"
             }],
             "decryption": "none"
         },
