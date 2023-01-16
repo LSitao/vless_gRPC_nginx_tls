@@ -1,6 +1,15 @@
 #!/bin/bash
 # author: https://t.me/iu536
 
+r00t=`echo $USER`
+if [ $r00t != "root" ]
+  then 
+          echo "You are not root!"
+	  echo
+	  echo "请在root用户下执行该脚本!"
+	  exit
+fi
+
 clear
 echo "欢迎使用vless+gRPC+nginx+tls一键脚本!"
 sleep 1
@@ -13,8 +22,8 @@ read -p "1.游戏直播; 2.影视站" checkweb
 #开bbr
 if [ `grep -c "net.ipv4.tcp_congestion_control = bbr" /etc/sysctl.conf` -eq '0' ]
   then
-        echo "检测到你的系统已经开启BBR啦！"
-	sleep 1 
+           echo "检测到你的系统已经开启BBR啦！"
+	   sleep 1 
 	   
   else    
       echo "检测到你的系统未开启BBR!"
@@ -25,8 +34,8 @@ if [ `grep -c "net.ipv4.tcp_congestion_control = bbr" /etc/sysctl.conf` -eq '0' 
                 echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
                 echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
                 sysctl -p
-				echo "BBR开启成功！"
-				sleep 1   
+		echo "BBR开启成功！"
+		sleep 1   
       fi
 	
 fi
@@ -50,7 +59,7 @@ if `test -s /usr/server.crt`
         echo
         echo -e "/usr/server.crt"
         echo -e "/usr/server.key\n"
- else
+else
         echo "证书安装失败！请检查原因！有问题可联系telegram @iu536"
 	exit
 fi
@@ -116,14 +125,14 @@ server {
     server_name ${domain};
 
 	 location / {
-          root /web;
+      root /web;
 	  index index.html;
     }
 
     location /grpc_proxy {
         grpc_read_timeout 2m;
         grpc_send_timeout 5m;
-	grpc_pass 127.0.0.1:16969;
+	    grpc_pass 127.0.0.1:16969;
 
     }
 
@@ -153,4 +162,4 @@ for time in `seq 9 -1 0`;do
         echo -n -e "\b$time"
         sleep 1
 done
-echo
+
