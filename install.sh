@@ -125,14 +125,14 @@ server {
     server_name ${domain};
 
 	 location / {
-      root /web;
+          root /web;
 	  index index.html;
     }
 
     location /grpc_proxy {
         grpc_read_timeout 2m;
         grpc_send_timeout 5m;
-	    grpc_pass 127.0.0.1:16969;
+	grpc_pass 127.0.0.1:16969;
 
     }
 
