@@ -71,7 +71,51 @@ systemctl enable xray
 
 id=`xray uuid`
 
-curl https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/server/server.json > /usr/local/etc/xray/config.json
+cat << EOF > /usr/local/etc/xray/config.json
+{
+    "log": {
+        "loglevel": "warning"
+    },
+    "inbounds": [{
+        "port": 16969,
+        "listen": "127.0.0.1",
+        "protocol": "vless",
+        "settings": {
+            "clients": [{
+                "id": "${id}"
+            }],
+            "decryption": "none"
+        },
+        "streamSettings": {
+            "network": "grpc",
+            "grpcSettings": {
+                "serviceName": "grpc_proxy"
+            }
+        }
+    }],
+    "outbounds": [{
+            "tag": "direct",
+            "protocol": "freedom",
+            "settings": {}
+        },
+        {
+            "tag": "blocked",
+            "protocol": "blackhole",
+            "settings": {}
+        }
+    ],
+    "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [{
+            "type": "field",
+            "ip": [
+                "geoip:private"
+            ],
+            "outboundTag": "blocked"
+        }]
+    }
+}
+EOF
 
 systemctl restart xray
 
