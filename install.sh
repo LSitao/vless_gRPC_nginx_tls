@@ -21,24 +21,25 @@ read -p "1.游戏直播; 2.影视站" checkweb
 
 #开bbr
 if [ `grep -c "net.ipv4.tcp_congestion_control = bbr" /etc/sysctl.conf` -eq '0' ]
+
   then
-           echo "检测到你的系统已经开启BBR啦！"
-	   sleep 1 
-	   
-  else    
-      echo "检测到你的系统未开启BBR!"
-      echo
-      read -p "是否开启bbr? [y/n] Default 'y':" checkbbr
-      if checkbbr=='y' || checkbbr=='\n'
+	echo "检测到你的系统未开启BBR!"
+        echo
+        read -p "是否开启bbr? [y/n] Default 'y':" checkbbr
+        if checkbbr=='y' || checkbbr=='\n'
         then
                 echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
                 echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
                 sysctl -p
 		echo "BBR开启成功！"
 		sleep 1   
-      fi
-	
+        fi
+  
+  else    
+           echo "检测到你的系统已经开启BBR啦！"
+	   sleep 1 	
 fi
+
 clear
 echo "OK! 一切已准备就绪，按回车键开始安装!"
 read
