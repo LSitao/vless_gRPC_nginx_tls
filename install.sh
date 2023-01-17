@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # author: https://t.me/iu536
 
 r00t=`echo $USER`
