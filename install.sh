@@ -4,8 +4,8 @@
 r00t=`echo $USER`
 if [ $r00t != "root" ]
   then 
-          clear
-          echo "You are not root!"
+      clear
+      echo "You are not root!"
 	  echo
 	  echo "请在root用户下执行该脚本!"
 	  exit
@@ -13,11 +13,17 @@ fi
 
 clear
 echo "欢迎使用vless+gRPC+nginx+tls一键脚本!"
-echo
-echo -e "author: https://t.me/iu536\n"
 sleep 1
 echo
 read -p "请输入你的域名[输入完毕后回车]:" domain
+if [ $domain=='\n' ]
+ then 
+     clear 
+     echo "别闹，你还没输入域名呢"
+	 sleep 2
+	 exit
+fi
+
 read -p "你想要什么端口? [0-65535]默认443:" port
 if $port=='\n'
  then port=443
