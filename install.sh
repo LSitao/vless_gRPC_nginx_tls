@@ -12,9 +12,15 @@ fi
 
 clear
 echo "欢迎使用vless+gRPC+nginx+tls一键脚本!"
+echo
+echo -e "author: https://t.me/iu536\n"
 sleep 1
 echo
 read -p "请输入你的域名[输入完毕后回车]:" domain
+read -p "你想要什么端口? [0-65535]默认443:" port
+if $port=='\n'
+ then port=443
+fi
 
 echo -e "你想要什么样的伪装站?\n"
 read -p "1.游戏直播; 2.影视站" checkweb
@@ -153,7 +159,9 @@ elif checkweb=='2'
 	 ls
 fi
 
-echo "
+if [ $port==443 ]
+ then
+ cat << EOF > /etc/nginx/conf.d/grpc_proxy.conf
 server {
     listen 80;
     server_name ${domain};
@@ -162,22 +170,47 @@ server {
     location / {
     rewrite (.*) https://${domain}\$1 permanent;
       }
-
 }
-
 server {
     listen 443 ssl http2;
     server_name ${domain};
-
 	 location / {
           root /web;
 	  index index.html;
+    }
+    location /grpc_proxy {
+        grpc_read_timeout 2m;
+        grpc_send_timeout 5m;
+	grpc_pass 127.0.0.1:16969;
+    }
+    ssl_certificate /usr/server.crt;
+    ssl_certificate_key /usr/server.key;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 5s;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 5m;
+    ssl_protocols TLSv1.3;
+    ssl_ciphers "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
+    ssl_prefer_server_ciphers on;
+} " 
+EOF
+else cat << EOF > /etc/nginx/conf.d/grpc_proxy.conf
+server {
+    listen $port ssl http2;
+    server_name taoge.site;
+    error_page 497 https://'$host':$port'$request_uri';
+	
+         location / {
+          root /web;
+          index index.html;
     }
 
     location /grpc_proxy {
         grpc_read_timeout 2m;
         grpc_send_timeout 5m;
-	grpc_pass 127.0.0.1:16969;
+        grpc_pass 127.0.0.1:16969;
 
     }
 
@@ -190,10 +223,11 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 5m;
     ssl_protocols TLSv1.3;
-    ssl_ciphers "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
+    ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4;
     ssl_prefer_server_ciphers on;
-} " > /etc/nginx/conf.d/grpc_proxy.conf
-
+}
+EOF
+fi
 systemctl restart nginx
 clear
 echo -e "安装完成!\n"
@@ -208,4 +242,3 @@ for time in `seq 9 -1 0`;do
         sleep 1
 done
 echo
-
