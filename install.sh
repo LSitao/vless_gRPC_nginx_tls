@@ -12,7 +12,7 @@ if [ $r00t != "root" ]
 fi
 
 clear
-echo -e "/t/t欢迎使用vless+gRPC+nginx+tls一键脚本!"
+echo -e "欢迎使用vless+gRPC+nginx+tls一键脚本!"
 sleep 1
 echo
 read -p "请输入你的域名[输入完毕后回车]:" domain
