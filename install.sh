@@ -4,6 +4,7 @@
 r00t=`echo $USER`
 if [ $r00t != "root" ]
   then 
+          clear
           echo "You are not root!"
 	  echo
 	  echo "请在root用户下执行该脚本!"
