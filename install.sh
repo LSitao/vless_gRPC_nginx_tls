@@ -16,20 +16,6 @@ echo -e "欢迎使用vless+gRPC+nginx+tls一键脚本!"
 sleep 1
 echo
 read -p "请输入你的域名[输入完毕后回车]:" domain
-if [ domain=='\n' ]
- then 
-     clear
-     echo "别闹，你还没输入域名呢"
-	 sleep 2
-	 read -p "请输入你的域名[输入完毕后回车]:" domain
-	  if [ domain=='\n' ]
-	   then 
-	   echo "焯,你还是没输入域名。。不玩了，两秒后退出脚本"
-	   echo
-	   sleep 2
-	   exit
-	  fi
-fi
 
 read -p "你想要什么端口? [0-65535]默认443:" port
 if port=='\n'
