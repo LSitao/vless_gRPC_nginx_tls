@@ -1,5 +1,6 @@
 #!/bin/bash
 
+apt remove nginx -y
 rm -rf /usr/iu/
 rm /usr/bin/iu
 bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ remove
