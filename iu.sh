@@ -1,9 +1,7 @@
 #!/bin/bash
-# author: https://t.me/iu536
+
 clear
 echo "欢迎使用iu的vless+gRPC+nginx+tls一键脚本!"
-echo "author: https://t.me/iu536"
-echo
 sleep 1
 echo
 
@@ -15,32 +13,37 @@ do
    echo -e "[3] 查看节点\n"
    echo -e "[4] 退出脚本\n"
    read -p "请选择[1-4]:" check
-   
    if [ $check -eq 1 ]
 	   then 
-	        bash /usr/iu/install.sh
+	        if  `test -e /usr/local/etc/xray/config.json`
+		    then 
+			   echo "你已经安装过啦~"
+		    else 
+	                   bash /usr/iu/install.sh
+	        fi
 			
-     elif [ $check -eq 2 ]
+			
+	 elif [ $check -eq 2 ]
 	   then 
 	        if `test -e /etc/nginx/conf.d/grpc_proxy.conf`
 		  then 
-	                     bash /usr/iu/change_port.sh
+	                    bash /usr/iu/change_port.sh
 		     else 
 			     echo "你还没安装节点！"
-		             sleep 1
+			     sleep 1
 			     clear
 	        fi
 			 
-     elif [ $check -eq 3 ]
+	 elif [ $check -eq 3 ]
 	   then 
-	      if `test -e /usr/iu/node`
-	         then
-	             cat /usr/iu/node
-	      else  
-		     echo "你还没安装节点！"
-		     sleep 1
-		     clear
-	      fi
+	      if `test -e /usr/usr/iu/node`
+		    then
+	                   cat /usr/iu/node
+		     else  
+			        echo "你还没安装节点！"
+				sleep 1
+				clear
+	     fi
 	
 fi
 	 
