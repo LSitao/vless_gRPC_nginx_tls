@@ -31,10 +31,11 @@ do
      elif [ $check -eq 3 ]
 	   then 
 	      if `test -e /usr/server.crt`
-	        cat /usr/iu/node
+	         then
+	             cat /usr/iu/node
 	      else  
-		  echo "你还没安装节点！"
-		  sleep 1
+		     echo "你还没安装节点！"
+		     sleep 1
 	      fi
 	
 fi
