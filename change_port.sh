@@ -78,9 +78,9 @@ server {
     ssl_prefer_server_ciphers on;
 }
 EOF
+fi
 service nginx restart
 
-fi
 clear
 echo "已成功将端口更改为$port!"
 echo
