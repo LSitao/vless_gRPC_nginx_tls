@@ -20,14 +20,12 @@ if test -e /usr/iu/iu.sh
 	  curl https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/iu.sh > /usr/iu/iu.sh
 	  
 	  cp /usr/iu/iu.sh /usr/bin/iu
+	  chmod 700 /usr/bin/iu
 	  
 	  curl https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/install.sh > /usr/iu/install.sh
 	  
-	  chmod 700 /usr/bin/iu
-	  
+	  curl https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/change_port.sh > /usr/iu/change_port.sh
+	   
 	  /usr/bin/iu
 	  
 fi
-	  
-	  
-	  
