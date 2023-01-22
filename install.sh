@@ -1,49 +1,53 @@
 #!/usr/bin/env bash
 # author: https://t.me/iu536
 
-r00t=`echo $USER`
-if [ $r00t != "root" ]
-  then 
-      clear
-      echo "You are not root!"
-	  echo
-	  echo "请在root用户下执行该脚本!"
-	  exit
-fi
-
-clear
-echo -e "欢迎使用vless+gRPC+nginx+tls一键脚本!"
-sleep 1
-echo
 read -p "请输入你的域名[输入完毕后回车]:" domain
 
-read -p "你想要什么端口? [0-65535]:" temp
-if [ $temp -ne 443 ]
- then port=$temp
- else port=443
+if [ -z $domain ]
+  then
+     clear
+     echo "别闹，你还没输入域名呢"
+	 sleep 2
+	 read -p "请输入你的域名[输入完毕后回车]:" domain
+	  if [ -z $domain ]
+	   then
+	   echo "焯,你还是没输入域名。。不玩了，两秒后退出脚本"
+	   echo
+	   sleep 2
+	   exit
+	  fi
 fi
+echo $domain > /usr/iu/domain
+
+read -p "你想要什么端口? [0-65535]默认443:" port
+if [ -z $port ]
+ then port=443
+fi
+
+echo $port > /usr/iu/port
 
 echo -e "你想要什么样的伪装站?\n"
 read -p "1.游戏直播; 2.影视站" checkweb
 
 #开bbr
-if [ `grep -c "net.ipv4.tcp_congestion_control = bbr" /etc/sysctl.conf` -eq '0' ]
+checkbbr=`lsmod | grep bbr`
 
-  then
-	echo "检测到你的系统未开启BBR!"
+if test -z "$checkbbr" 
+  then 
+       echo "检测到你的系统未开启BBR!"
         echo
-        read -p "是否开启bbr? [y/n] Default 'y':" checkbbr
-        if checkbbr=='y' || checkbbr=='\n'
-        then
+        read -p "是否开启bbr? [y/n] Default 'y':" checkbbragain
+         if checkbbr=='y' || [ -z $checkbbragain ]
+          then
                 echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
                 echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
                 sysctl -p
-		echo "BBR开启成功！"
-		sleep 1   
-        fi
+				echo "BBR开启成功！"
+				sleep 1   
+         fi
   
   else    
-           echo "检测到你的系统已经开启BBR啦！"
+       echo "检测到你的系统已经开启BBR啦！"
 	   sleep 1 	
 fi
 
@@ -78,6 +82,7 @@ bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release
 systemctl enable xray
 
 id=`xray uuid`
+echo $id > /usr/iu/id
 
 cat << EOF > /usr/local/etc/xray/config.json
 {
@@ -160,7 +165,7 @@ elif checkweb=='2'
 	 ls
 fi
 
-if [ $port==443 ]
+if [ $port -eq 443 ]
  then
  cat << EOF > /etc/nginx/conf.d/grpc_proxy.conf
 server {
@@ -195,13 +200,13 @@ server {
     ssl_protocols TLSv1.3;
     ssl_ciphers "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
     ssl_prefer_server_ciphers on;
-}
+} " 
 EOF
 else cat << EOF > /etc/nginx/conf.d/grpc_proxy.conf
 server {
     listen $port ssl http2;
-    server_name taoge.site;
-    error_page 497 https://'$host':$port'$request_uri';
+    server_name ${domain};
+    error_page 497 https://\$host:$port\$request_uri;
 	
          location / {
           root /web;
@@ -229,17 +234,19 @@ server {
 }
 EOF
 fi
+
 systemctl restart nginx
+
 clear
 echo -e "安装完成!\n"
-echo
+echo "vless://${id}@${domain}:$port?type=grpc&encryption=none&serviceName=grpc_proxy&security=tls&sni=${domain}#Node_Vless_gRPC" > /usr/iu/node
 echo "已经为你生成了节点连接:"
 echo
-echo "vless://${id}@${domain}:${port}?type=grpc&encryption=none&serviceName=grpc_proxy&security=tls&sni=${domain}#Node_Vless_gRPC"
+cat /usr/iu/node
 echo
-echo -e "即将退出脚本\n"
-for time in `seq 9 -1 0`;do
-        echo -n -e "\b$time"
-        sleep 1
-done
-echo
+#echo -e "即将退出脚本\n"
+#for time in `seq 9 -1 0`;do
+#       echo -n -e "\b$time"
+#       sleep 1
+#done
+#echo
