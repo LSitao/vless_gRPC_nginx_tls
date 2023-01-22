@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # author: https://t.me/iu536
 
+clear
 read -p "请输入你的域名[输入完毕后回车]:" domain
 
 if [ -z $domain ]
