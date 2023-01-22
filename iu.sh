@@ -1,7 +1,9 @@
 #!/bin/bash
-
+# author: https://t.me/iu536
 clear
 echo "欢迎使用iu的vless+gRPC+nginx+tls一键脚本!"
+echo "author: https://t.me/iu536"
+echo
 sleep 1
 echo
 
