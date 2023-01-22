@@ -1,7 +1,7 @@
 #!/bin/bash
 
 clear
-read -p "你想要什么端口? [0-65535]默认443:" temp
+read -p "你想要什么端口? [0-65535]:" temp
 if [ $temp -ne 443 ]
  then port=$temp
  else port=443
