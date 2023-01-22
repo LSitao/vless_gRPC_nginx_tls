@@ -15,16 +15,16 @@ if [ $port -eq 443 ]
  cat << EOF > /etc/nginx/conf.d/grpc_proxy.conf
 server {
     listen 80;
-    server_name ${domain};
+    server_name cera.2cd.cc;
     #charset utf-8;   
     
     location / {
-    rewrite (.*) https://${domain}\$1 permanent;
+    rewrite (.*) https://cera.2cd.cc\$1 permanent;
       }
 }
 server {
     listen 443 ssl http2;
-    server_name ${domain};
+    server_name cera.2cd.cc;
 	 location / {
           root /web;
 	  index index.html;
