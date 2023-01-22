@@ -13,29 +13,30 @@ do
    echo -e "[3] 查看节点\n"
    echo -e "[4] 退出脚本\n"
    read -p "请选择[1-4]:" check
-     if [ $check -eq 1 ]
+   
+   if [ $check -eq 1 ]
 	   then 
 	        bash /usr/iu/install.sh
 			
-	 elif [ $check -eq 2 ]
+     elif [ $check -eq 2 ]
 	   then 
 	        if `test -e /etc/nginx/conf.d/grpc_proxy.conf`
-			 then 
+		  then 
 	             bash /usr/iu/change_port.sh
 		     else 
 			     echo "你还没安装节点！"
-				 sleep 1
+		             sleep 1
 	        fi
 			 
-	 elif [ $check -eq 3 ]
+     elif [ $check -eq 3 ]
 	   then 
 	      if `test -e /usr/server.crt`
 	        cat /usr/iu/node
-			else  
-			    echo "你还没安装节点！"
-				sleep 1
-		  fi
+	      else  
+		  echo "你还没安装节点！"
+		  sleep 1
+	      fi
 	
-	 fi
+fi
 	 
 done 
