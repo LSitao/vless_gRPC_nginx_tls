@@ -28,6 +28,7 @@ do
 		     else 
 			     echo "你还没安装节点！"
 		             sleep 1
+			     clear
 	        fi
 			 
      elif [ $check -eq 3 ]
@@ -38,6 +39,7 @@ do
 	      else  
 		     echo "你还没安装节点！"
 		     sleep 1
+		     clear
 	      fi
 	
 fi
