@@ -17,9 +17,10 @@ sleep 1
 echo
 read -p "请输入你的域名[输入完毕后回车]:" domain
 
-read -p "你想要什么端口? [0-65535]默认443:" port
-if port=='\n'
- then port=443
+read -p "你想要什么端口? [0-65535]:" temp
+if [ $temp -ne 443 ]
+ then port=$temp
+ else port=443
 fi
 
 echo -e "你想要什么样的伪装站?\n"
