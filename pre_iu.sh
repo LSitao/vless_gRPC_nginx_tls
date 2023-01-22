@@ -23,6 +23,7 @@ if test -e /usr/iu/iu.sh
 	  
 	  curl https://raw.githubusercontent.com/LSitao/vless_gRPC_nginx_tls/main/install.sh > /usr/iu/install.sh
 	  
+	  chmod 700 /usr/bin/iu
 	  /usr/bin/iu
 	  
 fi
