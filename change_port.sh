@@ -1,30 +1,33 @@
 #!/bin/bash
 
 clear
-read -p "你想要什么端口? [0-65535]:" temp
-if [ $temp -ne 443 ]
- then port=$temp
- else port=443
+echo "<更换端口>"
+echo
+read -p "你想要什么端口? [0-65535]默认443:" port
+if [ -z $port ]
+ then port=443
 fi
 
 echo "OK 稍等一下"
 sleep 1
+
+domain=`cat /usr/iu/domain`
 
 if [ $port -eq 443 ]
  then
  cat << EOF > /etc/nginx/conf.d/grpc_proxy.conf
 server {
     listen 80;
-    server_name cera.2cd.cc;
+    server_name ${domain};
     #charset utf-8;   
     
     location / {
-    rewrite (.*) https://cera.2cd.cc\$1 permanent;
+    rewrite (.*) https://${domain}\$1 permanent;
       }
 }
 server {
     listen 443 ssl http2;
-    server_name cera.2cd.cc;
+    server_name ${domain};
 	 location / {
           root /web;
 	  index index.html;
@@ -45,13 +48,13 @@ server {
     ssl_protocols TLSv1.3;
     ssl_ciphers "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
     ssl_prefer_server_ciphers on;
-}
+} 
 EOF
 else cat << EOF > /etc/nginx/conf.d/grpc_proxy.conf
 server {
     listen $port ssl http2;
-    server_name cera.2cd.cc;
-    error_page 497 https://'$host':$port'$request_uri';
+    server_name ${domain};
+    error_page 497 https://\$host:$port\$request_uri;
 	
          location / {
           root /web;
@@ -79,10 +82,13 @@ server {
 }
 EOF
 fi
+
 service nginx restart
 
 clear
 echo "已成功将端口更改为$port!"
 echo
 echo "记得在客户端修改节点端口哦"
+sleep 2
+clear
 
