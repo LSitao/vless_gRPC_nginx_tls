@@ -8,7 +8,7 @@ if [ $temp -ne 443 ]
 fi
 
 echo "OK 稍等一下"
-sleep 2
+sleep 1
 
 if [ $port -eq 443 ]
  then
