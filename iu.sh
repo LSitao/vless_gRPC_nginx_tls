@@ -19,11 +19,23 @@ do
 			
 	 elif [ $check -eq 2 ]
 	   then 
-	        bash /usr/iu/change_port.sh
-			
+	        if `test -e /etc/nginx/conf.d/grpc_proxy.conf`
+			 then 
+	             bash /usr/iu/change_port.sh
+		     else 
+			     echo "你还没安装节点！"
+				 sleep 1
+	        fi
+			 
 	 elif [ $check -eq 3 ]
 	   then 
+	      if `test -e /usr/server.crt`
 	        cat /usr/iu/node
+			else  
+			    echo "你还没安装节点！"
+				sleep 1
+		  fi
+	
 	 fi
 	 
 done 
