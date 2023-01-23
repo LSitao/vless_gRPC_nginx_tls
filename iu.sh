@@ -13,38 +13,38 @@ do
    echo -e "[3] 查看节点\n"
    echo -e "[4] 退出脚本\n"
    read -p "请选择[1-4]:" check
-   if [ $check -eq 1 ]
+     if [ $check -eq 1 ]
 	   then 
-	        if  `test -e /usr/local/etc/xray/config.json`
-		    then 
-			   echo "你已经安装过啦~"
+	        if 	`test -e /usr/usr/iu/node`
+			 then 
+			     echo "你已经安装过啦~"
 		    else 
-	                   bash /usr/iu/install.sh
-	        fi
+	            bash /usr/iu/install.sh
+			fi
 			
 			
 	 elif [ $check -eq 2 ]
 	   then 
-	        if `test -e /etc/nginx/conf.d/grpc_proxy.conf`
-		  then 
-	                    bash /usr/iu/change_port.sh
+	        if `/usr/usr/iu/node`
+			 then 
+	             bash /usr/iu/change_port.sh
 		     else 
 			     echo "你还没安装节点！"
-			     sleep 1
-			     clear
+				 sleep 1
+				 clear
 	        fi
 			 
 	 elif [ $check -eq 3 ]
 	   then 
 	      if `test -e /usr/usr/iu/node`
 		    then
-	                   cat /usr/iu/node
-		     else  
-			        echo "你还没安装节点！"
+	            cat /usr/iu/node
+			else  
+			    echo "你还没安装节点！"
 				sleep 1
 				clear
-	     fi
+		  fi
 	
-fi
+	 fi
 	 
 done 
