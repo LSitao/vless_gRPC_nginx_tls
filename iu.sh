@@ -25,10 +25,10 @@ do
 			
 	 elif [ $check -eq 2 ]
 	   then 
-	        if `/usr/usr/iu/node`
-			 then 
+	        if `/usr/iu/node`
+		  then 
 	             bash /usr/iu/change_port.sh
-		     else 
+		else 
 			     echo "你还没安装节点！"
 				 sleep 1
 				 clear
@@ -36,8 +36,8 @@ do
 			 
 	 elif [ $check -eq 3 ]
 	   then 
-	      if `test -e /usr/usr/iu/node`
-		    then
+	      if `test -e /usr/iu/node`
+		then
 	            cat /usr/iu/node
 			else  
 			    echo "你还没安装节点！"
